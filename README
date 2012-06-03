@@ -19,8 +19,8 @@ To compile this project, simply type "make."
 Usage: ./main [-w WIDTH] [-h HEIGHT] [-t TURNS] [-x] [-y] [-c] [-e] [-f FILENAME]
 
 (Ordering does not matter. All of these options except FILENAME can be 
-omitted without any errors, as they have default values. No guarantee h
-ow nice it will look though)
+omitted without any errors, as they have default values. No guarantee 
+how nice it will look though)
 
 	[-w WIDTH] sets the width. If omitted, pictoral board will attempt to
 		detect width automatically. Coordinate boards will default to 20.
@@ -37,7 +37,7 @@ ow nice it will look though)
 	[-x] Deactivates horizontal wrapping in computation of cell status for 
 		next turn.
 
-	[-x] Deactivates vertical wrapping in computation of cell status for 
+	[-y] Deactivates vertical wrapping in computation of cell status for 
 		next turn.
 
 	[-c] Activates coordinate file intake instead of pictoral.
