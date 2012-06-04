@@ -42,4 +42,5 @@ how nice it will look though)
 
 	[-c] Activates coordinate file intake instead of pictorial.
 
-	[-e] Activates expanded printing mode for display of the board.
+	[-e] Activates expanded printing mode for display of the board. Will
+		display a count of the population for each turn.
