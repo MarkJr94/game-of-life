@@ -9,7 +9,7 @@ Included in this project are some sample files located in the "samples"
 The first format, which I will call a coordinate file, is a list of 
 	coordinates, one pair per line, each number separated by space, each
 	coordinate pair separated by a newline.
-The second format, which I call a pictoral file, is a simple depiction 
+The second format, which I call a pictorial file, is a simple depiction 
 	of the initial state, with a '.' meaning a dead cell, and anything 
 	else being alive. This was used so as to easily use the depictions 
 	found here: http://www.argentum.freeserve.co.uk/lex.htm
@@ -22,10 +22,10 @@ Usage: ./main [-w WIDTH] [-h HEIGHT] [-t TURNS] [-x] [-y] [-c] [-e] [-f FILENAME
 omitted without any errors, as they have default values. No guarantee 
 how nice it will look though)
 
-	[-w WIDTH] sets the width. If omitted, pictoral board will attempt to
+	[-w WIDTH] sets the width. If omitted, pictorial board will attempt to
 		detect width automatically. Coordinate boards will default to 20.
 
-	[-h HEIGHT] sets the height. If omitted, pictoral board will attempt to
+	[-h HEIGHT] sets the height. If omitted, pictorial board will attempt to
 		detect width automatically. Coordinate boards will default to 20.
 	
 	[-t TURNS] sets the number of turns to run for. If omitted, will 
@@ -40,6 +40,6 @@ how nice it will look though)
 	[-y] Deactivates vertical wrapping in computation of cell status for 
 		next turn.
 
-	[-c] Activates coordinate file intake instead of pictoral.
+	[-c] Activates coordinate file intake instead of pictorial.
 
 	[-e] Activates expanded printing mode for display of the board.

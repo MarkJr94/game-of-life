@@ -3,6 +3,8 @@
 #include <string>
 #include <sstream>
 #include <unistd.h>
+#include <cstdlib>
+
 #include "life.hpp"
 
 using namespace std;
@@ -37,9 +39,9 @@ Board::Board(const Board& other)
 	//~ cout << "Board-Clone created, w = " << w << ", h = " << h << "\n";
 }
 
-Board::Board(const char *fname, uint h, uint w)
+Board::Board(string fname, uint h, uint w)
 {
-	ifstream file (fname);
+	ifstream file (fname.c_str());
 	if (!file.is_open()) {
 		cerr << "Error: file " << fname << " could not be opened\n";
 		exit(1);
@@ -55,7 +57,7 @@ Board::Board(const char *fname, uint h, uint w)
 			}
 		}
 	} else {
-		uint * size = fileAnalyze(fname);
+		uint * size = fAnalyze(file);
 		wide = size[0]; high = size[1];
 		data = new char*[wide];
 		for (uint i = 0; i < wide; i++) {
@@ -66,25 +68,50 @@ Board::Board(const char *fname, uint h, uint w)
 		}		
 	}
 	
-
 	string line;
-	for (int i = 0; !file.eof(); i++) {
+	for (int i = 0; file.good(); i++) {
 		getline(file,line);
 		uint len = line.size();
+		//~ cout << line << endl;
 		for (uint j = 0; j < len; j++) {
 			if (line[j] != '.') {
 				data[j+2][i+2] = 1;
 			} else {
 				data[j+2][i+2] = 0;
 			}
-			cout << line[j];
 		}
-		cout << endl;
 	}
 	file.close();
 }
 
-Board::Board(uint h, uint w, const char *fname)
+uint *Board::fAnalyze(std::ifstream& file)
+{
+	uint *size = new uint[2];
+	size[0] = 0; size[1] = 0;
+		
+	file.seekg(0,ios::end);
+	uint mass = file.tellg();
+	file.seekg (0, ios::beg);
+	
+	char *buf = new char[mass];
+	file.read(buf,mass);
+	
+	uint i = 0;
+	while (buf[i++] != '\n') size[0]++;
+	size[1]++;
+	
+	while (i++ < mass) {
+		if (buf[i] == '\n') size[1]++;
+	}
+	
+	size[0] += 4; 
+	size[1] += 4;
+	file.seekg (0, ios::beg);
+	delete [] buf;
+	return size;
+}
+
+Board::Board(uint h, uint w, string fname)
 {
 	if (h == 0 || w == 0) {
 		cerr << "Constructing board from coordinate file"
@@ -92,7 +119,7 @@ Board::Board(uint h, uint w, const char *fname)
 		exit(1);
 	}
 	
-	ifstream file (fname);
+	ifstream file (fname.c_str());
 	if (!file.is_open()) {
 		cerr << "Error: file " << fname << " could not be opened\n";
 		exit(1);
@@ -112,33 +139,9 @@ Board::Board(uint h, uint w, const char *fname)
 	while (!file.eof()) {
 		getline(file,line);
 		stringstream(line) >> x >> y;
-		//~ cout << x << " " << y << "\n";
 		data[x][y] = 1;
 	}
 	file.close();
-}
-
-uint * Board::fileAnalyze(const  char *fname)
-{
-	uint *size = new uint[2];
-	size[0] = 0; size[1] = 0;
-	ifstream file (fname);
-	if (!file.is_open()) {
-		cerr << "Error: file " << fname << " could not be opened\n";
-		exit(1);
-	}
-	string line;
-	while (!file.eof()) {
-		getline(file,line);
-		size[1]++;
-		if (line.size() > size[0]) {
-			size[0] = line.size();
-		}
-	}
-	file.close();
-	size[0] += 4; 
-	size[1] += 4;
-	return size;
 }
 
 uint Board::getWide()

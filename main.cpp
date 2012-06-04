@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <unistd.h>
+#include <cstdlib>
 
 #include "life.hpp"
 
@@ -43,7 +44,7 @@ int main(int argc, char **argv)
 	bool wrapx = true ,wrapy = true, expand = false, pict = true;
 	uint width = 0, height = 0;
 	uint turns = 100;
-	char fname[300];
+	string fname;
 	int c;
 	
 	opterr = 1;
@@ -75,7 +76,8 @@ int main(int argc, char **argv)
 				break;
 			/* Option for filename (C style string)  */
 			case 'f':
-				strcpy(fname,optarg);
+				//~ strcpy(fname,optarg);
+				fname = optarg;
 				break;
 			default:
 				cout << "WWTTFF BBRROO??????\n";
@@ -89,8 +91,10 @@ int main(int argc, char **argv)
 	
 	for (int index = optind; index < argc; index++)
          cout <<"Non-option argument " << argv[index] << endl;
+	/* For testing purposes */
+	//~ testing(); 
 	
-	//~ testing();
+	/* Actual command processing/execution */
 	if (pict) {
 		Board gameBoard (fname);
 		gameBoard.play(turns, wrapx, wrapy, expand);

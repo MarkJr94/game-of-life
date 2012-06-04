@@ -1,10 +1,3 @@
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include <string>
-#include <sstream>
-#include <cstring>
-
 #ifndef LIFE_HPP_
 #define LIFE_HPP_
 
@@ -20,10 +13,10 @@ class Board {
 		Board(const Board& other);
 		
 		/* construct from pictoral file */
-		Board(const char *fname, uint h = 0, uint w = 0);
+		Board(std::string fname, uint h = 0, uint w = 0);
 		
 		/* Construct board from coordinate file */
-		Board(uint h, uint w, const char *fname);			
+		Board(uint h, uint w, std::string fname);			
 		
 		/* Wide getter */
 		uint getWide();
@@ -59,7 +52,7 @@ class Board {
 		/* For use with construction from pictoral file
 		 * gets necessary width and height
 		 * */
-		uint *fileAnalyze(const  char *fname);
+		uint *fAnalyze(std::ifstream& file);
 				
 		/* Checks if an individual cell will be alive
 		 * next round */
