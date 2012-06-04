@@ -4,6 +4,7 @@
 #include <sstream>
 #include <unistd.h>
 #include <cstdlib>
+#include <algorithm>
 
 #include "life.hpp"
 
@@ -13,20 +14,26 @@ Board::Board(uint w, uint h)
 {
 	data = new char*[w];
 	
+	/* Initialize zeroed out array */
 	for (uint i = 0; i < w; i++) {
 		data[i] = new char[h];
 		for (uint j = 0; j < h; j++) {
 			data[i][j] = 0;
 		}
 	}
+	
 	wide = w;
 	high = h;
+	population = 0;
+	cout << "Clean board created\n";
 }
 
 Board::Board(const Board& other)
 {
 	uint w = other.wide;
 	uint h = other.high;
+	
+	/* Copy in data from array */
 	data = new char*[w];
 	for (uint i = 0; i < w; i++) {
 		data[i] = new char[h];
@@ -36,17 +43,20 @@ Board::Board(const Board& other)
 	}
 	wide = w;
 	high = h;
-	//~ cout << "Board-Clone created, w = " << w << ", h = " << h << "\n";
+	population = 0;
+	cout << "Board-Clone created, w = " << w << ", h = " << h << "\n";
 }
 
 Board::Board(string fname, uint h, uint w)
 {
+	/* Open file, check for error */
 	ifstream file (fname.c_str());
 	if (!file.is_open()) {
 		cerr << "Error: file " << fname << " could not be opened\n";
 		exit(1);
 	}
 	
+	/* If values given for h and w, initialize board with them */
 	if (h != 0 && w != 0) {
 		wide = w; high = h;
 		data = new char*[wide];
@@ -57,6 +67,7 @@ Board::Board(string fname, uint h, uint w)
 			}
 		}
 	} else {
+		/* Else get values from file */
 		uint * size = fAnalyze(file);
 		wide = size[0]; high = size[1];
 		data = new char*[wide];
@@ -67,7 +78,9 @@ Board::Board(string fname, uint h, uint w)
 			}
 		}		
 	}
+	population = 0;
 	
+	/* Read in seed board status from pictorial file */
 	string line;
 	for (int i = 0; file.good(); i++) {
 		getline(file,line);
@@ -75,9 +88,10 @@ Board::Board(string fname, uint h, uint w)
 		//~ cout << line << endl;
 		for (uint j = 0; j < len; j++) {
 			if (line[j] != '.') {
-				data[j+2][i+2] = 1;
+				data[(j+2)%wide][(i+2)%high] = 1;
+				++population;
 			} else {
-				data[j+2][i+2] = 0;
+				data[(j+2)%wide][(i+2)%high] = 0;
 			}
 		}
 	}
@@ -119,12 +133,14 @@ Board::Board(uint h, uint w, string fname)
 		exit(1);
 	}
 	
+	/* Open file, check for errors */
 	ifstream file (fname.c_str());
 	if (!file.is_open()) {
 		cerr << "Error: file " << fname << " could not be opened\n";
 		exit(1);
 	}
 	
+	/* Initialize zeroed out array */
 	wide = w; high = h;
 	data = new char*[wide];
 	for (uint i = 0; i < wide; i++) {
@@ -133,13 +149,15 @@ Board::Board(uint h, uint w, string fname)
 				data[i][j] = 0;
 		}
 	}
+	population = 0;
 	
 	int x,y;
 	string line;
 	while (!file.eof()) {
 		getline(file,line);
 		stringstream(line) >> x >> y;
-		data[x][y] = 1;
+		data[x%wide][y%high] = 1;
+		++population;
 	}
 	file.close();
 }
@@ -159,8 +177,10 @@ void Board::display(bool expand)
 	uint w = wide;
 	uint h = high;
 	
+	/* Expanded printing */
 	if (expand) {
 		cout << "\n";
+		cout << "Population: " << population << endl;
 		for (uint j = 0; j < h; j++) {
 			for (uint i = 0; i < w; i++) {
 				if (data[i][j]) {
@@ -174,6 +194,7 @@ void Board::display(bool expand)
 		return;
 	}
 	
+	/* Normal */
 	cout << "\n";
 	for (uint j = 0; j < h; j++) {
 		for (uint i = 0; i < w; i++) {
@@ -207,7 +228,7 @@ bool Board::cellCheck(int x, int y, bool wrapx, bool wrapy)
 	int h = this->high;
 	uint popCount = 0;
 	
-	//~ Wraps around if wrap;
+	/* Wraps around if wrap; */
 	if (wrapx) {
 		minx = subFix(minx,w);
 		plusx = addFix(plusx,w);
@@ -244,16 +265,21 @@ bool Board::cellCheck(int x, int y, bool wrapx, bool wrapy)
 	
 	if (this->data[x][y]) {
 		if (1 < popCount && popCount < 4) return true;
+		--population;
+		return false;
 	} else {
-		if (popCount == 3) return true;
+		if (popCount == 3) {
+			++population;
+			return true;
+		}
 	}
 	
 	return false;
 }
 
-void Board::compute(bool wrapx, bool wrapy)
+void Board::compute(bool wrapx, bool wrapy, Board& scratch)
 {
-	Board scratch(wide,high);
+	/* Computes results for next turn in scratch board */
 	for (uint i= 0;i <wide;i++) {
 		for(uint j = 0; j <high;j++) {
 			if (cellCheck(i,j,wrapx,wrapy))
@@ -261,25 +287,44 @@ void Board::compute(bool wrapx, bool wrapy)
 		}
 	}
 	
+	/* Copies over values, zero out scratch */
 	for (uint i = 0;i < wide; i++) {
 		for (uint j = 0; j < high; j++) {
 			this->data[i][j] = scratch.data[i][j];
 		}
 	}
+	scratch.zero();
 }
 
 void Board::play(uint turns,bool wrapx, bool wrapy,bool expand)
 {
+	/* diplsay initial board, create scratch */
 	display(expand);
+	Board scratch (wide,high);
+	
+	/* Run game */
 	for (uint i = 0; i < turns; i++) {
-		compute(wrapx,wrapy);
+		if (population == 0) {
+			cout << "========= SIMULATION OVER: EVERYONE DIED =======\n";
+			return;
+		}
+		compute(wrapx,wrapy,scratch);
 		display(expand);
 		usleep(100000);
 	}
 	cout << "============= SIMULATION COMPLETE ==============\n";
 	sleep(1);
 }
-	
+
+void Board::zero()
+{
+	for (uint i = 0; i < wide; i++) {
+		for (uint j = 0; j < high; j++) {
+			data[i][j] = 0;
+		}
+	}
+}
+
 
 Board::~Board()
 {

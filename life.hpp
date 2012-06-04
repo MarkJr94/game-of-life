@@ -33,6 +33,7 @@ class Board {
 		/* plays for a given number of turns, 
 		 * with given wrapping options
 		 * and whether to display tightly packed or expanded
+		 * ends simulation if population gets to 0
 		 * */
 		void play(uint turns = 100, bool wrapx = true, bool wrapy = true, bool expand = false);
 		
@@ -43,6 +44,7 @@ class Board {
 		/* Data members */
 		uint wide;
 		uint high;
+		uint population;
 		char **data;
 		
 		/* Private functions for use with wrapping */
@@ -59,7 +61,10 @@ class Board {
 		bool cellCheck(int x, int y, bool wrapx, bool wrapy);
 		
 		/* computes board for next round */
-		void compute(bool wrapx,bool wrapy);
+		void compute(bool wrapx,bool wrapy, Board& scratch);
+		
+		/* Zeroes out a board */
+		void zero();
 };
 
 #endif /* LIFE_HPP_ */

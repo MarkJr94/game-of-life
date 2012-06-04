@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 	
 	/* Actual command processing/execution */
 	if (pict) {
-		Board gameBoard (fname);
+		Board gameBoard (fname,width,height);
 		gameBoard.play(turns, wrapx, wrapy, expand);
 	} else {
 		height == 0 ? height = 20 : 0;
