@@ -8,10 +8,10 @@
 
 #include "life.hpp"
 
-using namespace std;
-
 Board::Board(uint w, uint h)
 {
+	using namespace std;
+
 	data = new char*[w];
 	
 	/* Initialize zeroed out array */
@@ -30,6 +30,8 @@ Board::Board(uint w, uint h)
 
 Board::Board(const Board& other)
 {
+	using namespace std;
+
 	uint w = other.wide;
 	uint h = other.high;
 	
@@ -47,8 +49,10 @@ Board::Board(const Board& other)
 	cout << "Board-Clone created, w = " << w << ", h = " << h << "\n";
 }
 
-Board::Board(string fname, uint h, uint w)
+Board::Board(std::string fname, uint h, uint w)
 {
+	using namespace std;
+
 	/* Open file, check for error */
 	ifstream file (fname.c_str());
 	if (!file.is_open()) {
@@ -100,12 +104,13 @@ Board::Board(string fname, uint h, uint w)
 
 uint *Board::fAnalyze(std::ifstream& file)
 {
+
 	uint *size = new uint[2];
 	size[0] = 0; size[1] = 0;
 		
-	file.seekg(0,ios::end);
+	file.seekg(0, std::ios::end);
 	uint mass = file.tellg();
-	file.seekg (0, ios::beg);
+	file.seekg (0, std::ios::beg);
 	
 	char *buf = new char[mass];
 	file.read(buf,mass);
@@ -120,13 +125,15 @@ uint *Board::fAnalyze(std::ifstream& file)
 	
 	size[0] += 4; 
 	size[1] += 4;
-	file.seekg (0, ios::beg);
+	file.seekg (0, std::ios::beg);
 	delete [] buf;
 	return size;
 }
 
-Board::Board(uint h, uint w, string fname)
+Board::Board(uint h, uint w, std::string fname)
 {
+	using namespace std;
+
 	if (h == 0 || w == 0) {
 		cerr << "Constructing board from coordinate file"
 				<< "requires nonzero height and width input\n";
@@ -174,6 +181,8 @@ uint Board::getHigh()
 
 void Board::display(bool expand)
 {
+	using namespace std;
+
 	uint w = wide;
 	uint h = high;
 	
@@ -298,6 +307,8 @@ void Board::compute(bool wrapx, bool wrapy, Board& scratch)
 
 void Board::play(uint turns,bool wrapx, bool wrapy,bool expand)
 {
+	using namespace std;
+
 	/* diplsay initial board, create scratch */
 	display(expand);
 	Board scratch (wide,high);
