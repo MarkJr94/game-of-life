@@ -1,4 +1,5 @@
-#include <gtkmm.h>
+#include <gtkmm/window.h>
+#include <gtkmm/button.h>
 #include <iostream>
 //~ #include <fstream>
 //~ #include <string>
