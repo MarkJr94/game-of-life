@@ -14,9 +14,12 @@ The second format, which I call a pictorial file, is a simple depiction
 	else being alive. This was used so as to easily use the depictions 
 	found here: http://www.argentum.freeserve.co.uk/lex.htm
 
-To compile this project, simply type "make."
+To compile this project, simply type "make." This will result in two
+	executables "life-gui" and "life-cmd". Hopefully the GUI (when done)
+	will be self-explanatory. Below are instructions for the command 
+	line version.
 
-Usage: ./main [-w WIDTH] [-h HEIGHT] [-t TURNS] [-x] [-y] [-c] [-e] [-f FILENAME]
+Usage: ./life-cmd [-w WIDTH] [-h HEIGHT] [-t TURNS] [-x] [-y] [-c] [-e] [-f FILENAME]
 
 (Ordering does not matter. All of these options except FILENAME can be 
 omitted without any errors, as they have default values. No guarantee 
