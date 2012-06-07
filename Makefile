@@ -10,4 +10,4 @@ gui: life.cpp life.hpp main.cpp main.hpp gui.cpp
 	g++ -Wall -g gui.cpp main.cpp life.cpp -o life-gui `pkg-config --cflags --libs gtkmm-3.0`
 
 clean: 
-	rm main gui
+	rm life-cmd life-gui
