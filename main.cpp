@@ -9,7 +9,7 @@ int Atoi(const char *str)
 {
 	int retval;
 	
-	if ((retval = atoi(str)) <= 0) {
+	if ((retval = atoi(str)) < 0) {
 		std::cerr << "Error: Argument value must be positive integer\n";
 		exit(1);
 	}
