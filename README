@@ -15,9 +15,12 @@ The second format, which I call a pictorial file, is a simple depiction
 	found here: http://www.argentum.freeserve.co.uk/lex.htm
 
 To compile this project, simply type "make." This will result in two
-	executables "life-gui" and "life-cmd". Hopefully the GUI (when done)
-	will be self-explanatory. Below are instructions for the command 
-	line version.
+	executables "life-gui" and "life-cmd". 
+	
+To run the GUI, either type "./life-gui" or for graphical opening, use
+	the "GoL.sh" script. Click-to-run should working using the script.
+	The rest should be self-explanatory. Below are instructions for the command 
+	line version:
 
 Usage: ./life-cmd [-w WIDTH] [-h HEIGHT] [-t TURNS] [-x] [-y] [-c] [-e] [-f FILENAME]
 
