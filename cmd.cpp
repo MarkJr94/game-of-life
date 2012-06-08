@@ -1,9 +1,5 @@
 #include <iostream>
-#include <fstream>
 #include <string>
-#include <sstream>
-#include <unistd.h>
-#include <cstdlib>
 
 #include "life.hpp"
 #include "main.hpp"
@@ -21,7 +17,7 @@ int main(int argc, char **argv)
 	
 	opterr = 1;
 	
-	while (( c= getopt(argc,argv,"w:h:t:xycef:")) != -1) {
+	while ((c = getopt(argc,argv,"w:h:t:xycef:")) != -1) {
 		switch (c) {
 			/* Options with numerical arguments */
 			case 'w':
@@ -48,7 +44,6 @@ int main(int argc, char **argv)
 				break;
 			/* Option for filename (C style string)  */
 			case 'f':
-				//~ strcpy(fname,optarg);
 				fname = optarg;
 				break;
 			default:
