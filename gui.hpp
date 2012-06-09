@@ -5,6 +5,7 @@
 #include <gtkmm/button.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/box.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/settings.h>
 #include <gtkmm/stock.h>
@@ -23,22 +24,20 @@ protected:
 	void on_quit_clicked();
 	void on_auto_toggled();
 	
+	/* Top level Grid */
+	Gtk::Grid grid;
+	
 	/* Eventually gonna be file choosing thing */
 	Gtk::Entry entry;
 	
 	/* Box and CheckButtons for wrapping horizontally
 	 * an vertically
 	 * */
-	Gtk::Box *wrapbox;
 	Gtk::CheckButton *check_wrapx, *check_wrapy;
-	Gtk::Box *vbox;
 	
 	/* Boxes for entering width, height, an choosing to find it
 	 * automatically
 	 * */
-	Gtk::Box *size_hbox;
-	Gtk::Box *size_ent_box;
-	Gtk::Box *size_auto_box;
 	
 	Gtk::CheckButton *auto_check;
 	Gtk::Entry enter_width, enter_height;
@@ -46,7 +45,6 @@ protected:
 	
 	/* Box for number of turns 
 	 * as well as entry */
-	 Gtk::Box *turn_box;
 	 Gtk::Label turn_label;
 	 Gtk::Entry enter_turns;
 	 
@@ -54,13 +52,11 @@ protected:
 	  * as well as pictorial or coordinate
 	  * file
 	  * */
-	Gtk::Box *choose_box;
 	Gtk::CheckButton *printing, *filetype;
 	
 	/* Primary buttons, go and quit 
 	 * and accompanying box
 	 * */
-	Gtk::Box *hbox;
 	Gtk::Button *go_button, *quit_bu;
 	
 	/* Helper function for putting stock labels on buttons */

@@ -9,77 +9,74 @@ MyWin::MyWin()
 	using namespace Gtk;
 	set_title("Conway's Game of Life");
 	set_border_width(10);
-	set_default_size(500,200);
-	vbox = manage(new Box(Gtk::ORIENTATION_VERTICAL));
-	add(*vbox);
+	set_resizable(false);
+	
+	add(grid);
+	grid.set_row_spacing(15);
+	grid.set_column_spacing(20);
+	grid.set_row_homogeneous(false);
 	
 	entry.set_text("/home/markjr/game-of-life/samples/puffsup");
-	vbox->pack_start(entry);
-	
+	grid.attach(entry,1,1,2,1);
+		
 	check_wrapx = manage(new CheckButton("Wrap Horizontally"));
 	check_wrapx->set_active();
 	check_wrapy = manage(new CheckButton("Wrap Vertically"));
 	check_wrapy->set_active();
-	wrapbox = manage(new Box());
-	wrapbox->pack_start(*check_wrapx);
-	wrapbox->pack_start(*check_wrapy);
-	vbox->pack_start(*wrapbox);
+	grid.attach(*check_wrapx,1,2,1,1);
+	grid.attach(*check_wrapy,2,2,1,1);
 	
 	height_label.set_text("Height:");
+	height_label.set_halign(ALIGN_START);
 	enter_height.set_max_length(3);
 	enter_height.set_text("0");
 	width_label.set_text("Width:");
+	width_label.set_halign(ALIGN_START);
 	enter_width.set_max_length(3);
 	enter_width.set_text("0");
-	size_ent_box = manage(new Box(Gtk::ORIENTATION_VERTICAL));
-	size_ent_box->pack_start(height_label);
-	size_ent_box->pack_start(enter_height);
-	size_ent_box->pack_start(width_label);
-	size_ent_box->pack_start(enter_width);
+	grid.attach(height_label,1,3,1,1);
+	grid.attach(enter_height,2,3,1,1);
+	grid.attach(width_label,1,4,1,1);
+	grid.attach(enter_width,2,4,1,1);
 	
 	auto_check = manage(new CheckButton("Get Size Automatically"));
 	auto_check->signal_clicked().connect(sigc::mem_fun(*this,
 			&MyWin::on_auto_toggled));
-	size_auto_box = manage(new Box());
-	size_auto_box->pack_start(*auto_check);
+	auto_check->set_halign(ALIGN_CENTER);
 	
-	size_hbox = manage(new Box());
-	size_hbox->pack_start(*size_ent_box);
-	size_hbox->pack_start(*size_auto_box);
-	vbox->pack_start(*size_hbox);
+	grid.attach(*auto_check,1,5,2,1);
 	
-	turn_label.set_text("Number of Turns: ");
+	turn_label.set_text("Number of Turns:");
+	turn_label.set_halign(ALIGN_START);
 	enter_turns.set_text("100");
 	
-	turn_box = manage(new Box());
-	turn_box->pack_start(turn_label);
-	turn_box->pack_end(enter_turns);
-	vbox->pack_start(*turn_box);
+	grid.attach(turn_label,1,6,1,1);
+	grid.attach(enter_turns,2,6,1,1);
 	
 	printing = manage(new CheckButton("Expanded Printing"));
 	filetype = manage(new CheckButton("Coordinate File"));
 	
-	choose_box = manage(new Box());
-	choose_box->pack_start(*printing);
-	choose_box->pack_start(*filetype);
-	vbox->pack_start(*choose_box);
+	grid.attach(*printing,1,7,1,1);
+	grid.attach(*filetype,2,7,1,1);
 	
 	go_button = set_but("GO!!!",Stock::APPLY);
 	go_button->signal_clicked().connect(sigc::mem_fun(*this,
 			&MyWin::on_go_clicked));
 	go_button->set_can_default(true);
 	go_button->grab_default();
+	
+	go_button->set_vexpand(true);
+	go_button->set_valign(ALIGN_FILL);
 
 	quit_bu = set_but("Exit",Stock::QUIT);
 	quit_bu->signal_clicked().connect(sigc::mem_fun(*this,
 			&MyWin::on_quit_clicked));
+
+	quit_bu->set_vexpand(true);
+	quit_bu->set_valign(ALIGN_FILL);
 	
-	hbox = manage(new Box());		
-	hbox->pack_start(*go_button);
-	hbox->pack_start(*quit_bu);
-				
-	vbox->pack_start(*hbox);
-	
+	grid.attach(*go_button,1,8,1,3);
+	grid.attach(*quit_bu,2,8,1,3);	
 	
 	show_all_children();
 };
