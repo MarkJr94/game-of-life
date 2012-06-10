@@ -41,30 +41,30 @@ MyWin::MyWin()
 	width_label.set_halign(ALIGN_START);
 	enter_width.set_max_length(3);
 	enter_width.set_text("0");
-	grid.attach(height_label,1,3,1,1);
-	grid.attach(enter_height,2,3,1,1);
-	grid.attach(width_label,1,4,1,1);
-	grid.attach(enter_width,2,4,1,1);
+	grid.attach(height_label,1,4,1,1);
+	grid.attach(enter_height,2,4,1,1);
+	grid.attach(width_label,1,5,1,1);
+	grid.attach(enter_width,2,5,1,1);
 	
 	auto_check = manage(new CheckButton("Get Size Automatically"));
 	auto_check->signal_clicked().connect(sigc::mem_fun(*this,
 			&MyWin::on_auto_toggled));
 	auto_check->set_halign(ALIGN_CENTER);
 	
-	grid.attach(*auto_check,1,5,2,1);
+	grid.attach(*auto_check,1,6,2,1);
 	
 	turn_label.set_text("Number of Turns:");
 	turn_label.set_halign(ALIGN_START);
 	enter_turns.set_text("100");
 	
-	grid.attach(turn_label,1,6,1,1);
-	grid.attach(enter_turns,2,6,1,1);
+	grid.attach(turn_label,1,7,1,1);
+	grid.attach(enter_turns,2,7,1,1);
 	
 	printing = manage(new CheckButton("Expanded Printing"));
 	filetype = manage(new CheckButton("Coordinate File"));
 	
-	grid.attach(*printing,1,7,1,1);
-	grid.attach(*filetype,2,7,1,1);
+	grid.attach(*printing,1,8,1,1);
+	grid.attach(*filetype,2,8,1,1);
 	
 	go_button = set_but("GO!!!",Stock::APPLY);
 	go_button->signal_clicked().connect(sigc::mem_fun(*this,
@@ -82,8 +82,8 @@ MyWin::MyWin()
 	quit_bu->set_vexpand(true);
 	quit_bu->set_valign(ALIGN_FILL);
 	
-	grid.attach(*go_button,1,8,1,3);
-	grid.attach(*quit_bu,2,8,1,3);	
+	grid.attach(*go_button,1,9,1,3);
+	grid.attach(*quit_bu,2,9,1,3);	
 	
 	show_all_children();
 };
