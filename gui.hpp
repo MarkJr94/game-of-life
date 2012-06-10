@@ -6,6 +6,7 @@
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/box.h>
 #include <gtkmm/grid.h>
+#include <gtkmm/frame.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/settings.h>
 #include <gtkmm/stock.h>
@@ -33,6 +34,8 @@ protected:
 	/* Box and CheckButtons for wrapping horizontally
 	 * an vertically
 	 * */
+	Gtk::Frame wrapframe;
+	Gtk::Box wrapbox;
 	Gtk::CheckButton *check_wrapx, *check_wrapy;
 	
 	/* Boxes for entering width, height, an choosing to find it

@@ -23,8 +23,15 @@ MyWin::MyWin()
 	check_wrapx->set_active();
 	check_wrapy = manage(new CheckButton("Wrap Vertically"));
 	check_wrapy->set_active();
-	grid.attach(*check_wrapx,1,2,1,1);
-	grid.attach(*check_wrapy,2,2,1,1);
+	wrapbox.pack_start(*check_wrapx,true,true);
+	wrapbox.pack_start(*check_wrapy,true,true);
+	wrapframe.add(wrapbox);
+	wrapframe.set_label("Wrapping Options");
+	wrapframe.set_shadow_type(SHADOW_ETCHED_IN);
+	
+	//~ grid.attach(*check_wrapx,1,2,1,1);
+	//~ grid.attach(*check_wrapy,2,2,1,1);
+	grid.attach(wrapframe,1,2,2,2);
 	
 	height_label.set_text("Height:");
 	height_label.set_halign(ALIGN_START);
