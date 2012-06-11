@@ -1,4 +1,7 @@
 #include <iostream>
+#include <string>
+#include <cstdlib>
+#include <allegro.h>
 
 #include "life.hpp"
 #include "main.hpp"
@@ -10,6 +13,7 @@ MyWin::MyWin()
 	set_title("Conway's Game of Life");
 	set_border_width(10);
 	set_resizable(false);
+	set_default_size(300,200);
 	
 	add(grid);
 	grid.set_row_spacing(15);
@@ -17,21 +21,22 @@ MyWin::MyWin()
 	grid.set_row_homogeneous(false);
 	
 	entry.set_text("/home/markjr/game-of-life/samples/puffsup");
-	grid.attach(entry,1,1,2,1);
-		
+	file_button = set_but("Choose File",Stock::DIRECTORY);
+	file_button->signal_clicked().connect(sigc::mem_fun(*this,
+			&MyWin::on_file_chosen));
+	
+	ent_box.pack_start(entry,true,true);
+	ent_box.pack_end(*file_button,false,false);
+	
+	grid.attach(ent_box,1,1,2,1);
+	
 	check_wrapx = manage(new CheckButton("Wrap Horizontally"));
 	check_wrapx->set_active();
 	check_wrapy = manage(new CheckButton("Wrap Vertically"));
 	check_wrapy->set_active();
-	wrapbox.pack_start(*check_wrapx,true,true);
-	wrapbox.pack_start(*check_wrapy,true,true);
-	wrapframe.add(wrapbox);
-	wrapframe.set_label("Wrapping Options");
-	wrapframe.set_shadow_type(SHADOW_ETCHED_IN);
 	
-	//~ grid.attach(*check_wrapx,1,2,1,1);
-	//~ grid.attach(*check_wrapy,2,2,1,1);
-	grid.attach(wrapframe,1,2,2,2);
+	grid.attach(*check_wrapx,1,2,1,1);
+	grid.attach(*check_wrapy,2,2,1,1);
 	
 	height_label.set_text("Height:");
 	height_label.set_halign(ALIGN_START);
@@ -119,6 +124,47 @@ void MyWin::on_auto_toggled()
 	enter_width.set_text("0");
 }
 
+void MyWin::on_file_chosen()
+{
+	Gtk::FileChooserDialog dialog("Please choose a file",
+		Gtk::FILE_CHOOSER_ACTION_OPEN);
+	dialog.set_transient_for(*this);
+	
+	//Add response buttons the the dialog:
+	dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	dialog.add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_OK);
+	
+	Glib::RefPtr<Gtk::FileFilter> filter_text = Gtk::FileFilter::create();
+	filter_text->set_name("Text files");
+	filter_text->add_mime_type("text/plain");
+	dialog.add_filter(filter_text);
+	
+	Glib::RefPtr<Gtk::FileFilter> filter_any = Gtk::FileFilter::create();
+	filter_any->set_name("Any files");
+	filter_any->add_pattern("*");
+	dialog.add_filter(filter_any);
+	
+	int result = dialog.run();
+	std::string fname;
+	
+	switch(result) {
+		case (Gtk::RESPONSE_OK): {
+			fname = dialog.get_filename();
+			std::cout << "File selected: " << fname << std::endl;
+			entry.set_text(fname);
+			break;
+		}
+		case (Gtk::RESPONSE_CANCEL): {
+			std::cout << "Cancel clicked\n";
+			break;
+		}
+		default: {
+			std::cout << "Unexpected button clicked." << std::endl;
+			break;
+		}
+	}
+}
+
 MyWin::~MyWin()
 {
 }
@@ -142,6 +188,8 @@ int main(int argc, char *argv[])
 	Gtk::Settings::get_default()->property_gtk_button_images() = true;
 
 	MyWin window;
-
-	return app->run(window);
+	app->run(window);
+	
+	doalleg();
+	return 0;
 }

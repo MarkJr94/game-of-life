@@ -9,6 +9,7 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/settings.h>
+#include <gtkmm/filechooserdialog.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/stockid.h>
 #include <gtkmm/image.h>
@@ -24,18 +25,19 @@ protected:
 	void on_go_clicked();
 	void on_quit_clicked();
 	void on_auto_toggled();
+	void on_file_chosen();
 	
 	/* Top level Grid */
 	Gtk::Grid grid;
 	
 	/* Eventually gonna be file choosing thing */
 	Gtk::Entry entry;
+	Gtk::Button *file_button;
+	Gtk::Box ent_box;
 	
 	/* Box and CheckButtons for wrapping horizontally
 	 * an vertically
 	 * */
-	Gtk::Frame wrapframe;
-	Gtk::Box wrapbox;
 	Gtk::CheckButton *check_wrapx, *check_wrapy;
 	
 	/* Boxes for entering width, height, an choosing to find it
