@@ -58,8 +58,6 @@ int main(int argc, char **argv)
 	
 	for (int index = optind; index < argc; index++)
          cout <<"Non-option argument " << argv[index] << endl;
-	/* For testing purposes */
-	//~ testing(); 
 	
 	/* Actual command processing/execution */
 	if (pict) {
