@@ -7,6 +7,74 @@
 #include "main.hpp"
 #include "gui.hpp"
 
+BITMAP *buffer;
+
+void Board::draw()
+{
+	uint h = high; uint w = wide;
+		
+	const int COL = makecol(0,255,0);
+	const int WHITE = makecol(255,255,255);
+	clear_to_color(buffer,WHITE);
+	
+	/* Go through board, filling in cells according
+	 * to cell status
+	 * */
+	int ycord = 0;
+	for (uint j = 0; j < h; j++) {
+		int xcord = 0;
+		for (uint i = 0; i < w; i++) {
+			if (data[i][j]) {
+				rectfill(buffer,xcord,ycord,xcord +10,ycord +10,COL);
+			} else {
+				rectfill(buffer,xcord,ycord,xcord +10,ycord +10,WHITE);
+				rect(buffer,xcord,ycord,xcord +10,ycord +10,COL);
+			}
+			xcord+=10;
+		}
+		ycord +=10;
+	}
+	
+	blit(buffer,screen,0,0,0,0,w*10,h*10);
+}
+
+void Board::playtodraw(uint turns, bool wrapx, bool wrapy, bool expand)
+{
+	using namespace std;
+	
+	/* Initialize allegro, initialize buffer bitmap
+	 * */
+	const int WIDTH = wide * 10,HEIGHT = high * 10;
+	allegro_init();
+    install_keyboard();
+    set_gfx_mode( GFX_AUTODETECT_WINDOWED, WIDTH, HEIGHT, 0, 0);
+    buffer = create_bitmap(WIDTH,HEIGHT);
+	
+	/* display initial board, create scratch */
+	draw();
+	Board scratch (wide,high);
+	
+	/* Run game */
+	for (uint i = 0; i < turns; i++) {
+		if (population == 0) {
+			set_gfx_mode(GFX_TEXT,0,0,0,0);
+			allegro_message("SIMULATION OVER; EVERYONE DIED.\n");
+			destroy_bitmap(buffer);
+			allegro_exit();
+			return;
+		}
+		compute(wrapx,wrapy,scratch);
+		draw();
+		usleep(100000);
+	}
+	
+	sleep(1);
+	destroy_bitmap(buffer);
+	allegro_exit();
+	return;
+}
+END_OF_MAIN()
+
 MyWin::MyWin()
 {
 	using namespace Gtk;
@@ -60,7 +128,7 @@ MyWin::MyWin()
 	
 	turn_label.set_text("Number of Turns:");
 	turn_label.set_halign(ALIGN_START);
-	enter_turns.set_text("100");
+	enter_turns.set_text("50");
 	
 	grid.attach(turn_label,1,7,1,1);
 	grid.attach(enter_turns,2,7,1,1);
@@ -188,8 +256,5 @@ int main(int argc, char *argv[])
 	Gtk::Settings::get_default()->property_gtk_button_images() = true;
 
 	MyWin window;
-	app->run(window);
-	
-	doalleg();
-	return 0;
+	return app->run(window);
 }
