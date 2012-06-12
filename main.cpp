@@ -42,11 +42,11 @@ void process(std::string fname, uint width, uint height, uint turns,
 {
 	if (pict) {
 		Board gameBoard (fname,width,height);
-		gameBoard.play(turns, wrapx, wrapy, expand);
+		gameBoard.playtodraw(turns, wrapx, wrapy, expand);
 	} else {
 		height == 0 ? height = 20 : 0;
 		width == 0 ? width = 20 : 0;
 		Board gameBoard (width,height,fname);
-		gameBoard.play(turns, wrapx, wrapy, expand);
+		gameBoard.playtodraw(turns, wrapx, wrapy, expand);
 	}
 }
