@@ -28,7 +28,16 @@ class Board {
 		 * board can be tightly packed or expanded
 		 * */
 		void display(bool expand = false);
-
+		
+		/* Draws board, not implemented, you must overload
+		 * it on the basis of whatever drawing thing you're using
+		 * 
+		 * */
+		void draw();
+		
+		/* For play using graphical drawing
+		 * (Not implemented) */
+		void playtodraw(uint turns = 100, bool wrapx = true, bool wrapy = true, bool expand = false);
 		
 		/* plays for a given number of turns, 
 		 * with given wrapping options
