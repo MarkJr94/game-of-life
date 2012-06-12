@@ -4,7 +4,6 @@
 #include <sstream>
 #include <unistd.h>
 #include <cstdlib>
-#include <algorithm>
 
 #include "life.hpp"
 
