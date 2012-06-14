@@ -1,6 +1,8 @@
 #ifndef LIFE_HPP_
 #define LIFE_HPP_
 
+#include <vector>
+
 typedef unsigned int uint;
 
 class Board {
@@ -24,27 +26,27 @@ class Board {
 		/* High getter */
 		uint getHigh();
 		
-		/* prints board 
-		 * board can be tightly packed or expanded
-		 * */
-		void display(bool expand = false);
-		
 		/* Draws board, not implemented, you must overload
 		 * it on the basis of whatever drawing thing you're using
 		 * 
 		 * */
 		void draw();
 		
+		/* prints board 
+		 * board can be tightly packed or expanded
+		 * */
+		void draw(bool);
+		
 		/* For play using graphical drawing
 		 * (Not implemented) */
-		void playtodraw(uint turns = 100, bool wrapx = true, bool wrapy = true, bool expand = false);
+		void play(uint turns, bool wrapx, bool wrapy);
 		
 		/* plays for a given number of turns, 
 		 * with given wrapping options
 		 * and whether to display tightly packed or expanded
 		 * ends simulation if population gets to 0
 		 * */
-		void play(uint turns = 100, bool wrapx = true, bool wrapy = true, bool expand = false);
+		void play(uint turns, bool wrapx, bool wrapy, bool expand);
 		
 		/* destructor */
 		~Board();
@@ -54,7 +56,8 @@ class Board {
 		uint wide;
 		uint high;
 		uint population;
-		char **data;
+		//~ char **data;
+		std::vector<std::vector<bool> > data;
 		
 		/* Private functions for use with wrapping */
 		inline int addFix(int val, int dim);

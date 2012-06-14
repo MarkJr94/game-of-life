@@ -4,6 +4,7 @@
 #include <sstream>
 #include <unistd.h>
 #include <cstdlib>
+#include <allegro.h>
 
 #include "life.hpp"
 
@@ -11,15 +12,7 @@ Board::Board(uint w, uint h)
 {
 	using namespace std;
 
-	data = new char*[w];
-	
-	/* Initialize zeroed out array */
-	for (uint i = 0; i < w; i++) {
-		data[i] = new char[h];
-		for (uint j = 0; j < h; j++) {
-			data[i][j] = 0;
-		}
-	}
+	data.resize (w, vector<bool> (h,false));
 	
 	wide = w;
 	high = h;
@@ -31,21 +24,15 @@ Board::Board(const Board& other)
 {
 	using namespace std;
 
-	uint w = other.wide;
-	uint h = other.high;
+	wide = other.wide;
+	high = other.high;
 	
 	/* Copy in data from array */
-	data = new char*[w];
-	for (uint i = 0; i < w; i++) {
-		data[i] = new char[h];
-		for (uint j = 0; j < h; j++) {
-			data[i][j] = other.data[i][j];
-		}
-	}
-	wide = w;
-	high = h;
+	data.resize (wide, vector<bool> (high,false));
+	data = other.data;
+	
 	population = 0;
-	cout << "Board-Clone created, w = " << w << ", h = " << h << "\n";
+	cout << "Board-Clone created, w = " << wide << ", h = " << high << "\n";
 }
 
 Board::Board(std::string fname, uint h, uint w)
@@ -62,25 +49,12 @@ Board::Board(std::string fname, uint h, uint w)
 	/* If values given for h and w, initialize board with them */
 	if (h != 0 && w != 0) {
 		wide = w; high = h;
-		data = new char*[wide];
-		for (uint i = 0; i < wide; i++) {
-			data[i] = new char[high];
-			for (uint j = 0; j < high; j++) {
-					data[i][j] = 0;
-			}
-		}
 	} else {
 		/* Else get values from file */
 		uint * size = fAnalyze(file);
 		wide = size[0]; high = size[1];
-		data = new char*[wide];
-		for (uint i = 0; i < wide; i++) {
-			data[i] = new char[high];
-			for (uint j = 0; j < high; j++) {
-					data[i][j] = 0;
-			}
-		}		
 	}
+	data.resize (wide, vector<bool> (high,false));
 	population = 0;
 	
 	/* Read in seed board status from pictorial file */
@@ -148,13 +122,7 @@ Board::Board(uint h, uint w, std::string fname)
 	
 	/* Initialize zeroed out array */
 	wide = w; high = h;
-	data = new char*[wide];
-	for (uint i = 0; i < wide; i++) {
-		data[i] = new char[high];
-		for (uint j = 0; j < high; j++) {
-				data[i][j] = 0;
-		}
-	}
+	vector<vector <bool> > data (w, vector<bool> (h,false));
 	population = 0;
 	
 	int x,y;
@@ -176,44 +144,6 @@ uint Board::getWide()
 uint Board::getHigh()
 {
 	return high;
-}
-
-void Board::display(bool expand)
-{
-	using namespace std;
-
-	uint w = wide;
-	uint h = high;
-	
-	/* Expanded printing */
-	if (expand) {
-		cout << "\n";
-		cout << "Population: " << population << endl;
-		for (uint j = 0; j < h; j++) {
-			for (uint i = 0; i < w; i++) {
-				if (data[i][j]) {
-					cout << "@ ";
-				} else {
-					cout << "- ";
-				}
-			}
-			cout << "\n";
-		}
-		return;
-	}
-	
-	/* Normal */
-	cout << "\n";
-	for (uint j = 0; j < h; j++) {
-		for (uint i = 0; i < w; i++) {
-			if (data[i][j]) {
-				cout << "O";
-			} else {
-				cout << ".";
-			}
-		}
-		cout << "\n";
-	}	
 }
 
 inline int Board::addFix(int val, int dim)
@@ -296,12 +226,46 @@ void Board::compute(bool wrapx, bool wrapy, Board& scratch)
 	}
 	
 	/* Copies over values, zero out scratch */
-	for (uint i = 0;i < wide; i++) {
-		for (uint j = 0; j < high; j++) {
-			this->data[i][j] = scratch.data[i][j];
-		}
-	}
+	data = scratch.data;
 	scratch.zero();
+}
+
+void Board::draw(bool expand)
+{
+	using namespace std;
+
+	uint w = wide;
+	uint h = high;
+	
+	/* Expanded printing */
+	if (expand) {
+		cout << "\n";
+		cout << "Population: " << population << endl;
+		for (uint j = 0; j < h; j++) {
+			for (uint i = 0; i < w; i++) {
+				if (data[i][j]) {
+					cout << "@ ";
+				} else {
+					cout << "- ";
+				}
+			}
+			cout << "\n";
+		}
+		return;
+	}
+	
+	/* Normal */
+	cout << "\n";
+	for (uint j = 0; j < h; j++) {
+		for (uint i = 0; i < w; i++) {
+			if (data[i][j]) {
+				cout << "O";
+			} else {
+				cout << ".";
+			}
+		}
+		cout << "\n";
+	}	
 }
 
 void Board::play(uint turns,bool wrapx, bool wrapy,bool expand)
@@ -309,7 +273,7 @@ void Board::play(uint turns,bool wrapx, bool wrapy,bool expand)
 	using namespace std;
 
 	/* diplsay initial board, create scratch */
-	display(expand);
+	draw(expand);
 	Board scratch (wide,high);
 	
 	/* Run game */
@@ -319,12 +283,80 @@ void Board::play(uint turns,bool wrapx, bool wrapy,bool expand)
 			return;
 		}
 		compute(wrapx,wrapy,scratch);
-		display(expand);
+		draw(expand);
 		usleep(100000);
 	}
 	cout << "============= SIMULATION COMPLETE ==============\n";
 	sleep(1);
 }
+
+BITMAP *buffer;
+
+void Board::draw()
+{
+	uint h = high; uint w = wide;
+		
+	const int COL = makecol(0,255,0);
+	const int WHITE = makecol(255,255,255);
+	clear_to_color(buffer,WHITE);
+	
+	/* Go through board, filling in cells according
+	 * to cell status
+	 * */
+	int ycord = 0;
+	for (uint j = 0; j < h; j++) {
+		int xcord = 0;
+		for (uint i = 0; i < w; i++) {
+			if (data[i][j]) {
+				rectfill(buffer,xcord,ycord,xcord +10,ycord +10,COL);
+			} else {
+				rectfill(buffer,xcord,ycord,xcord +10,ycord +10,WHITE);
+				rect(buffer,xcord,ycord,xcord +10,ycord +10,COL);
+			}
+			xcord+=10;
+		}
+		ycord +=10;
+	}
+	
+	blit(buffer,screen,0,0,0,0,w*10,h*10);
+}
+
+void Board::play(uint turns, bool wrapx, bool wrapy)
+{
+	using namespace std;
+	
+	/* Initialize allegro, initialize buffer bitmap
+	 * */
+	const int WIDTH = wide * 10,HEIGHT = high * 10;
+	allegro_init();
+    install_keyboard();
+    set_gfx_mode( GFX_AUTODETECT_WINDOWED, WIDTH, HEIGHT, 0, 0);
+    buffer = create_bitmap(WIDTH,HEIGHT);
+	
+	/* display initial board, create scratch */
+	draw();
+	Board scratch (wide,high);
+	
+	/* Run game */
+	for (uint i = 0; i < turns; i++) {
+		if (population == 0) {
+			set_gfx_mode(GFX_TEXT,0,0,0,0);
+			allegro_message("SIMULATION OVER; EVERYONE DIED.\n");
+			destroy_bitmap(buffer);
+			allegro_exit();
+			return;
+		}
+		compute(wrapx,wrapy,scratch);
+		draw();
+		usleep(100000);
+	}
+	
+	sleep(1);
+	destroy_bitmap(buffer);
+	allegro_exit();
+	return;
+}
+END_OF_MAIN()
 
 void Board::zero()
 {
@@ -338,5 +370,5 @@ void Board::zero()
 
 Board::~Board()
 {
-	delete [] data;
+	std::cout << "Board deleted\n";
 }
