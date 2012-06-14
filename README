@@ -17,10 +17,9 @@ The second format, which I call a pictorial file, is a simple depiction
 To compile this project, simply type "make." This will result in two
 	executables "life-gui" and "life-cmd". 
 	
-To run the GUI, either type "./life-gui" or for graphical opening, use
-	the "GoL.sh" script. Click-to-run should working using the script.
-	The rest should be self-explanatory. Below are instructions for the command 
-	line version:
+To run the GUI, either type "./life-gui" or for graphical opening, double
+	click on "life-gui" in a file browser. Below are instructions for
+	the command line version:
 
 Usage: ./life-cmd [-w WIDTH] [-h HEIGHT] [-t TURNS] [-x] [-y] [-c] [-e] [-f FILENAME]
 
