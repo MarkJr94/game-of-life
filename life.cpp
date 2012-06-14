@@ -122,7 +122,7 @@ Board::Board(uint h, uint w, std::string fname)
 	
 	/* Initialize zeroed out array */
 	wide = w; high = h;
-	vector<vector <bool> > data (w, vector<bool> (h,false));
+	data.resize (wide, vector<bool> (high,false));
 	population = 0;
 	
 	int x,y;
