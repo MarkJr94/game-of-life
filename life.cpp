@@ -65,10 +65,10 @@ Board::Board(std::string fname, uint h, uint w)
 		//~ cout << line << endl;
 		for (uint j = 0; j < len; j++) {
 			if (line[j] != '.') {
-				data[(j+2)%wide][(i+2)%high] = 1;
+				data[(j+2)%wide][(i+2)%high] = true;
 				++population;
 			} else {
-				data[(j+2)%wide][(i+2)%high] = 0;
+				data[(j+2)%wide][(i+2)%high] = false;
 			}
 		}
 	}
@@ -130,7 +130,7 @@ Board::Board(uint h, uint w, std::string fname)
 	while (!file.eof()) {
 		getline(file,line);
 		stringstream(line) >> x >> y;
-		data[x%wide][y%high] = 1;
+		data[x%wide][y%high] = true;
 		++population;
 	}
 	file.close();
@@ -303,19 +303,19 @@ void Board::draw()
 	/* Go through board, filling in cells according
 	 * to cell status
 	 * */
-	int ycord = 0;
-	for (uint j = 0; j < h; j++) {
-		int xcord = 0;
-		for (uint i = 0; i < w; i++) {
+	int xcord = 0;
+	for (uint i = 0; i < w; i++) {
+		int ycord = 0;
+		for (uint j = 0; j < h; j++) {
 			if (data[i][j]) {
 				rectfill(buffer,xcord,ycord,xcord +10,ycord +10,COL);
 			} else {
 				rectfill(buffer,xcord,ycord,xcord +10,ycord +10,WHITE);
 				rect(buffer,xcord,ycord,xcord +10,ycord +10,COL);
 			}
-			xcord+=10;
+			ycord+=10;
 		}
-		ycord +=10;
+		xcord +=10;
 	}
 	
 	blit(buffer,screen,0,0,0,0,w*10,h*10);
