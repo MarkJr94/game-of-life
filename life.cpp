@@ -17,7 +17,6 @@ Board::Board(uint w, uint h)
 	wide = w;
 	high = h;
 	population = 0;
-	cout << "Clean board created\n";
 }
 
 Board::Board(const Board& other)
@@ -32,7 +31,6 @@ Board::Board(const Board& other)
 	data = other.data;
 	
 	population = 0;
-	cout << "Board-Clone created, w = " << wide << ", h = " << high << "\n";
 }
 
 Board::Board(std::string fname, uint h, uint w)
@@ -62,7 +60,6 @@ Board::Board(std::string fname, uint h, uint w)
 	for (int i = 0; file.good(); i++) {
 		getline(file,line);
 		uint len = line.size();
-		//~ cout << line << endl;
 		for (uint j = 0; j < len; j++) {
 			if (line[j] != '.') {
 				data[(j+2)%wide][(i+2)%high] = true;
@@ -370,5 +367,4 @@ void Board::zero()
 
 Board::~Board()
 {
-	std::cout << "Board deleted\n";
 }
