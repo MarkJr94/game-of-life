@@ -68,4 +68,6 @@ protected:
 	Gtk::Button *set_but(const char *lab, const Gtk::StockID& stock);
 };
 
+void process(std::string fname, uint width, uint height, uint turns,
+		bool wrapx, bool wrapy, bool expand, bool pict);
 #endif /* GUI_HPP_ */

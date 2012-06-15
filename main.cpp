@@ -33,20 +33,3 @@ int testing()
 	
 	return 1;
 }
-
-/* Processes arguments, actually begins simulation
- * for ease of use with gui plugin
- * */
-void process(std::string fname, uint width, uint height, uint turns,
-		bool wrapx, bool wrapy, bool expand, bool pict)
-{
-	if (pict) {
-		Board gameBoard (fname,width,height);
-		gameBoard.play(turns, wrapx, wrapy);
-	} else {
-		height == 0 ? height = 20 : 0;
-		width == 0 ? width = 20 : 0;
-		Board gameBoard (width,height,fname);
-		gameBoard.play(turns, wrapx, wrapy);
-	}
-}

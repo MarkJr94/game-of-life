@@ -1,12 +1,39 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <thread>
+#include <mutex>
+#include <vector>
 
 #include "life.hpp"
 #include "main.hpp"
 #include "gui.hpp"
 
+std::mutex life_lock;
+bool life_is_running;
 
+/* Processes arguments, actually begins simulation
+ * for ease of use with gui plugin
+ * */
+void process(std::string fname, uint width, uint height, uint turns,
+		bool wrapx, bool wrapy, bool expand, bool pict)
+{
+	if (pict) {
+		std::lock_guard<std::mutex> lock(life_lock);
+		life_is_running = true;
+		Board gameBoard (fname,width,height);
+		gameBoard.play(turns, wrapx, wrapy);
+		life_is_running = false;
+	} else {
+		std::lock_guard<std::mutex> lock(life_lock);
+		life_is_running = true;
+		height == 0 ? height = 20 : 0;
+		width == 0 ? width = 20 : 0;
+		Board gameBoard (width,height,fname);
+		gameBoard.play(turns, wrapx, wrapy);
+		life_is_running = false;
+	}
+}
 
 MyWin::MyWin()
 {
@@ -96,6 +123,7 @@ MyWin::MyWin()
 
 void MyWin::on_go_clicked() 
 {
+	if (life_is_running)return;
 	std::string fname = entry.get_text();
 	uint width = Atoi(enter_width.get_text().c_str());
 	uint height = Atoi(enter_height.get_text().c_str());
@@ -104,7 +132,9 @@ void MyWin::on_go_clicked()
 	bool wrapy = check_wrapy->get_active();
 	bool expand = printing->get_active();
 	bool pict = !filetype->get_active();
-	process(fname,width,height,turns,wrapx,wrapy,expand,pict);
+	
+	std::thread thread(process,fname,width,height,turns,wrapx,wrapy,expand,pict);
+	thread.detach();
 	/* std::cout << "wrapx  = " << wrapx << " wrapy = " << wrapy << " expand = " 
 			<< expand << " pict = " << pict << " turns = " << turns 
 			<< " width = " << width	<< " height = " << height 
