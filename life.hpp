@@ -30,23 +30,23 @@ class Board {
 		 * it on the basis of whatever drawing thing you're using
 		 * 
 		 * */
-		void draw();
+		void drawGraphical();
 		
 		/* prints board 
 		 * board can be tightly packed or expanded
 		 * */
-		void draw(bool);
+		void drawText(bool);
 		
 		/* For play using graphical drawing
-		 * (Not implemented) */
-		void play(uint turns, bool wrapx, bool wrapy);
+		 * */
+		void playGraphical(uint turns, bool wrapx, bool wrapy);
 		
 		/* plays for a given number of turns, 
 		 * with given wrapping options
 		 * and whether to display tightly packed or expanded
 		 * ends simulation if population gets to 0
 		 * */
-		void play(uint turns, bool wrapx, bool wrapy, bool expand);
+		void playText(uint turns, bool wrapx, bool wrapy, bool expand);
 		
 		/* destructor */
 		~Board();

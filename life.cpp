@@ -227,7 +227,7 @@ void Board::compute(bool wrapx, bool wrapy, Board& scratch)
 	scratch.zero();
 }
 
-void Board::draw(bool expand)
+void Board::drawText(bool expand)
 {
 	using namespace std;
 
@@ -265,12 +265,12 @@ void Board::draw(bool expand)
 	}	
 }
 
-void Board::play(uint turns,bool wrapx, bool wrapy,bool expand)
+void Board::playText(uint turns,bool wrapx, bool wrapy,bool expand)
 {
 	using namespace std;
 
 	/* diplsay initial board, create scratch */
-	draw(expand);
+	drawText(expand);
 	Board scratch (wide,high);
 	
 	/* Run game */
@@ -280,7 +280,7 @@ void Board::play(uint turns,bool wrapx, bool wrapy,bool expand)
 			return;
 		}
 		compute(wrapx,wrapy,scratch);
-		draw(expand);
+		drawText(expand);
 		usleep(100000);
 	}
 	cout << "============= SIMULATION COMPLETE ==============\n";
@@ -289,7 +289,7 @@ void Board::play(uint turns,bool wrapx, bool wrapy,bool expand)
 
 BITMAP *buffer;
 
-void Board::draw()
+void Board::drawGraphical()
 {
 	uint h = high; uint w = wide;
 		
@@ -318,7 +318,7 @@ void Board::draw()
 	blit(buffer,screen,0,0,0,0,w*10,h*10);
 }
 
-void Board::play(uint turns, bool wrapx, bool wrapy)
+void Board::playGraphical(uint turns, bool wrapx, bool wrapy)
 {
 	using namespace std;
 	
@@ -331,7 +331,7 @@ void Board::play(uint turns, bool wrapx, bool wrapy)
     buffer = create_bitmap(WIDTH,HEIGHT);
 	
 	/* display initial board, create scratch */
-	draw();
+	drawGraphical();
 	Board scratch (wide,high);
 	
 	/* Run game */
@@ -344,7 +344,7 @@ void Board::play(uint turns, bool wrapx, bool wrapy)
 			return;
 		}
 		compute(wrapx,wrapy,scratch);
-		draw();
+		drawGraphical();
 		usleep(100000);
 	}
 	

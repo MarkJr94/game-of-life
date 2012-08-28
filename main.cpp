@@ -26,10 +26,10 @@ int Atoi(const char *str)
 int testing()
 {
 	Board coord (20,20,"samples/weekender.txt");
-	coord.play(100,true,true,true);
+	coord.playText(100,true,true,true);
 	
 	Board pict ("samples/puffsup");
-	pict.play(100,true,true);
+	pict.playGraphical(100,true,true);
 	
 	return 1;
 }

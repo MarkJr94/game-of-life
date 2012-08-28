@@ -22,7 +22,7 @@ void process(std::string fname, uint width, uint height, uint turns,
 		std::lock_guard<std::mutex> lock(life_lock);
 		life_is_running = true;
 		Board gameBoard (fname,width,height);
-		gameBoard.play(turns, wrapx, wrapy);
+		gameBoard.playGraphical(turns, wrapx, wrapy);
 		life_is_running = false;
 	} else {
 		std::lock_guard<std::mutex> lock(life_lock);
@@ -30,7 +30,7 @@ void process(std::string fname, uint width, uint height, uint turns,
 		height == 0 ? height = 20 : 0;
 		width == 0 ? width = 20 : 0;
 		Board gameBoard (width,height,fname);
-		gameBoard.play(turns, wrapx, wrapy);
+		gameBoard.playGraphical(turns, wrapx, wrapy);
 		life_is_running = false;
 	}
 }
