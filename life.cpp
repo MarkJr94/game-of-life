@@ -16,6 +16,10 @@ Board::Board(uint w, uint h) :
 
 }
 
+Board::~Board()
+{
+}
+
 void Board::readPictoral(std::string filename, uint width, uint height)
 {
 	/* Open file, check for error */
@@ -310,13 +314,13 @@ void Board::playGraphical(uint turns, bool wrapx, bool wrapy)
 	Board scratch(mWidth, mHeight);
 
 	/* Run game */
-	for (uint i = 0; i < turns; i++) {
+	for (uint i = 0; i < turns && mWindow.IsOpened(); i++) {
 		if (mPopulation == 0) {
-			mWindow.Close();
-			return;
+			obituary();
 		}
 		compute(wrapx, wrapy, scratch);
 		drawGraphical();
+		checkClosing();
 		usleep(100000);
 	}
 
@@ -334,6 +338,28 @@ void Board::zero()
 	}
 }
 
-Board::~Board()
-{
+void Board::obituary() {
+	sf::String message ("Everyone is dead.");
+	message.SetPosition(0,mWindow.GetHeight()/2);
+	message.SetColor(sf::Color(0xff,0,0));
+	mWindow.Draw(message);
+	mWindow.Display();
+	sleep(2);
+	mWindow.Close();
+}
+
+void Board::checkClosing() {
+	using sf::Event;
+
+	Event e;
+
+	while (mWindow.GetEvent(e)) {
+		switch (e.Type) {
+		case Event::EventType::Closed:
+			mWindow.Close();
+			break;
+		default:
+			break;
+		}
+	}
 }

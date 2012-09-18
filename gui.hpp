@@ -20,11 +20,11 @@ private:
 	Gtk::Grid mGrid;
 	
 	/* Eventually gonna be file choosing thing */
-	Gtk::Entry mEntry;
+	Gtk::Entry mEntryFile;
 	Gtk::Button mFileButton;
 	Gtk::Box mBoxFile;
 	
-	/* Box and CheckButtons for wrapping horizontally
+	/* CheckButtons for wrapping horizontally
 	 * an vertically
 	 * */
 	Gtk::CheckButton mCheckWrapx, mCheckWrapy;

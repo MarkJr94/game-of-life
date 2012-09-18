@@ -55,12 +55,12 @@ MyWin::MyWin() :
 	mGrid.set_column_spacing(20);
 	mGrid.set_row_homogeneous(false);
 
-	mEntry.set_text("samples/puffsup");
+	mEntryFile.set_text("samples/puffsup");
 	setStock(mFileButton, "Choose File", Gtk::Stock::DIRECTORY);
 	mFileButton.signal_clicked().connect(
 			sigc::mem_fun(*this, &MyWin::onFileClicked));
 
-	mBoxFile.pack_start(mEntry, true, true);
+	mBoxFile.pack_start(mEntryFile, true, true);
 	mBoxFile.pack_end(mFileButton, false, false);
 
 	mGrid.attach(mBoxFile, 1, 1, 2, 1);
@@ -130,7 +130,7 @@ void MyWin::onGoClicked()
 {
 	if (life_is_running)
 		return;
-	std::string fname = mEntry.get_text();
+	std::string fname = mEntryFile.get_text();
 	uint width = Atoi(mEntryWidth.get_text().c_str());
 	uint height = Atoi(mEntryHeight.get_text().c_str());
 	uint turns = Atoi(mEntryTurn.get_text().c_str());
@@ -189,7 +189,7 @@ void MyWin::onFileClicked()
 	case (Gtk::RESPONSE_OK): {
 		fname = dialog.get_filename();
 		std::cout << "File selected: " << fname << std::endl;
-		mEntry.set_text(fname);
+		mEntryFile.set_text(fname);
 		break;
 	}
 	case (Gtk::RESPONSE_CANCEL): {

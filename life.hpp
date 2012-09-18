@@ -93,6 +93,12 @@ private:
 
 	/* Zeroes out a board */
 	void zero();
+
+	/* Writes death message to the sf::RenderWindow and closes it */
+	void obituary();
+
+	/* Checks for a closing event in the sf::RenderWindow */
+	void checkClosing();
 };
 
 #endif /* LIFE_HPP_ */
