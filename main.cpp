@@ -25,10 +25,12 @@ int Atoi(const char *str)
  * */
 int testing()
 {
-	Board coord (20,20,"samples/weekender.txt");
+	Board coord;
+	coord.readCoordinate("samples/weekender.txt",20,20);
 	coord.playText(100,true,true,true);
 	
-	Board pict ("samples/puffsup");
+	Board pict;
+	pict.readPictoral("samples/puffsup");
 	pict.playGraphical(100,true,true);
 	
 	return 1;
